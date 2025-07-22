@@ -55,7 +55,7 @@ intellijPlatform {
         }
         description = """
             <h1>English Readme：</h1>
-            <p>Easy Switch</p>
+            <p>Easy Switcher</p>
         
             <h1>中文说明：</h1>
             <p>代理快速切换</a></p>

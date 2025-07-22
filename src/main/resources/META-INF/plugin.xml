@@ -1,11 +1,11 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
     <!-- Unique identifier of the plugin. It should be FQN. It cannot be changed between the plugin versions. -->
-    <id>io.github.godfather1103.easy-switch-plugin</id>
+    <id>io.github.godfather1103.easy-switcher-plugin</id>
 
     <!-- Public plugin name should be written in Title Case.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-name -->
-    <name>Easy Switch</name>
+    <name>Easy SwitchEr</name>
 
     <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
     <vendor email="chuchuanbao@gmail.com" url="https://gitee.com/godfather1103/">Jack Chu</vendor>
@@ -14,7 +14,7 @@
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
     <description><![CDATA[
             <h1>English Readme：</h1>
-            <p>Easy Switch</p>
+            <p>Easy Switcher</p>
 
             <h1>中文说明：</h1>
             <p>代理快速切换</a></p>
@@ -27,6 +27,13 @@
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
-
+        <applicationConfigurable
+                groupId="appearance"
+                groupWeight="20"
+                id="io.github.godfather1103.easy-switcher-plugin"
+                dynamic="true"
+                displayName="Easy Switcher Configuration"
+                provider="io.github.godfather1103.easy.switcher.settings.AppSettingsConfigurableProvider"
+        />
     </extensions>
 </idea-plugin>

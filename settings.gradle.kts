@@ -1,1 +1,1 @@
-rootProject.name = "easy-switch-plugin"
+rootProject.name = "easy-switcher-plugin"
