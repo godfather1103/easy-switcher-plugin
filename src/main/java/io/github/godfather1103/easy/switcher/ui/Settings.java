@@ -2,9 +2,11 @@ package io.github.godfather1103.easy.switcher.ui;
 
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.util.NlsContexts;
+import com.intellij.ui.JBColor;
 import io.github.godfather1103.easy.switcher.settings.AppSettings;
 import io.github.godfather1103.easy.switcher.settings.ConfigBundle;
-import org.apache.commons.lang3.StringUtils;
+import io.github.godfather1103.easy.switcher.util.HttpUtils;
+import io.github.godfather1103.easy.switcher.util.StringUtils;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -12,6 +14,9 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.util.Objects;
 import java.util.Optional;
+
+import static io.github.godfather1103.easy.switcher.util.StringUtils.isPortOrEmpty;
+import static io.github.godfather1103.easy.switcher.util.StringUtils.showString;
 
 
 /**
@@ -35,6 +40,10 @@ public class Settings implements Configurable {
     private JTextField authUserName;
     private JPasswordField authPassword;
     private JCheckBox enableAuth;
+    private JTextField profileUrl;
+    private JTextArea downloadProfile;
+    private JTextArea customProfile;
+    private JButton downProfileButton;
 
     public Settings() {
         proxyPort.addFocusListener(new FocusAdapter() {
@@ -45,27 +54,17 @@ public class Settings implements Configurable {
                 }
             }
         });
-    }
-
-    private static boolean isPortOrEmpty(String text) {
-        if (StringUtils.isEmpty(text)) {
-            return true;
-        }
-        try {
-            var port = Integer.parseInt(text);
-            return port >= 0 && port <= 65535;
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
-
-
-    private static String showString(char[] str) {
-        if (str == null || str.length == 0) {
-            return "";
-        } else {
-            return new String(str);
-        }
+        profileUrl.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                downProfileButton.setEnabled(StringUtils.isUrl(profileUrl.getText()));
+            }
+        });
+        downProfileButton.addActionListener(e -> downloadProfile.setText(HttpUtils.downAutoproxyRule(profileUrl.getText())));
+        downloadProfile.setBorder(BorderFactory.createLineBorder(JBColor.LIGHT_GRAY));
+        downloadProfile.setAutoscrolls(true);
+        customProfile.setBorder(BorderFactory.createLineBorder(JBColor.LIGHT_GRAY));
+        customProfile.setAutoscrolls(true);
     }
 
     @Override
@@ -95,6 +94,7 @@ public class Settings implements Configurable {
         var select2 = enableAuth.isSelected();
         authUserName.setEnabled(select && select2);
         authPassword.setEnabled(select && select2);
+        downProfileButton.setEnabled(StringUtils.isUrl(profileUrl.getText()));
     }
 
     @Override

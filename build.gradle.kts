@@ -19,6 +19,9 @@ repositories {
 // Configure Gradle IntelliJ Plugin
 // Read more: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin.html
 dependencies {
+    implementation("com.squareup.okhttp3:okhttp:3.12.3")
+    implementation("io.vavr:vavr:0.10.4")
+    testImplementation("junit:junit:4.13.2")
     compileOnly("org.projectlombok:lombok:${property("lombok.version")}")
     annotationProcessor("org.projectlombok:lombok:${property("lombok.version")}")
     intellijPlatform {
