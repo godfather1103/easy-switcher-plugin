@@ -52,6 +52,9 @@ public final class AppSettings implements PersistentStateComponent<AppSettings.S
         private boolean enableAuth;
         private String authUserName;
         private String authPassword;
+        private String profileUrl;
+        private String downloadProfile;
+        private String customProfile;
 
         public State() {
             this.proxyEnable = false;

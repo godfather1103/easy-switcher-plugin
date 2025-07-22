@@ -60,7 +60,16 @@ public class Settings implements Configurable {
                 downProfileButton.setEnabled(StringUtils.isUrl(profileUrl.getText()));
             }
         });
-        downProfileButton.addActionListener(e -> downloadProfile.setText(HttpUtils.downAutoproxyRule(profileUrl.getText())));
+        downProfileButton.addActionListener(e -> {
+            try {
+                downProfileButton.setEnabled(false);
+                downloadProfile.setText(HttpUtils.downAutoproxyRule(profileUrl.getText()));
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            } finally {
+                downProfileButton.setEnabled(true);
+            }
+        });
         downloadProfile.setBorder(BorderFactory.createLineBorder(JBColor.LIGHT_GRAY));
         downloadProfile.setAutoscrolls(true);
         customProfile.setBorder(BorderFactory.createLineBorder(JBColor.LIGHT_GRAY));
@@ -104,6 +113,9 @@ public class Settings implements Configurable {
                 || !Objects.equals(state.getProxyProtocol(), protocol.getSelectedItem())
                 || !Objects.equals(state.getProxyHost(), proxyHost.getText())
                 || !Objects.equals(state.getProxyPort(), proxyPort.getText())
+                || !Objects.equals(state.getDownloadProfile(), downloadProfile.getText())
+                || !Objects.equals(state.getProfileUrl(), profileUrl.getText())
+                || !Objects.equals(state.getCustomProfile(), customProfile.getText())
                 || !Objects.equals(state.isEnableAuth(), enableAuth.isSelected())
                 || !Objects.equals(state.getAuthUserName(), authUserName.getText())
                 || !Objects.equals(state.getAuthPassword(), showString(authPassword.getPassword()));
@@ -119,7 +131,15 @@ public class Settings implements Configurable {
         state.setEnableAuth(enableAuth.isSelected());
         state.setAuthUserName(authUserName.getText());
         state.setAuthPassword(showString(authPassword.getPassword()));
+        state.setProfileUrl(profileUrl.getText());
+        state.setDownloadProfile(downloadProfile.getText());
+        state.setCustomProfile(customProfile.getText());
         actionOnSelect();
+        if (StringUtils.isNotEmpty(profileUrl.getText()) && StringUtils.isEmpty(downloadProfile.getText())) {
+            String text = HttpUtils.downAutoproxyRule(profileUrl.getText());
+            downloadProfile.setText(text);
+            state.setDownloadProfile(text);
+        }
     }
 
     @Override
@@ -132,6 +152,9 @@ public class Settings implements Configurable {
         enableAuth.setSelected(state.isEnableAuth());
         authUserName.setText(state.getAuthUserName());
         authPassword.setText(state.getAuthPassword());
+        profileUrl.setText(state.getProfileUrl());
+        downloadProfile.setText(state.getDownloadProfile());
+        customProfile.setText(state.getCustomProfile());
         actionOnSelect();
     }
 }
