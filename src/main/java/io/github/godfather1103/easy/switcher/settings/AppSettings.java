@@ -49,9 +49,13 @@ public final class AppSettings implements PersistentStateComponent<AppSettings.S
         private String proxyProtocol;
         private String proxyHost;
         private String proxyPort;
+        private boolean enableAuth;
+        private String authUserName;
+        private String authPassword;
 
         public State() {
             this.proxyEnable = false;
+            this.enableAuth = false;
         }
     }
 }

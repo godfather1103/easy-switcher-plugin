@@ -7,6 +7,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -30,9 +32,41 @@ public class Settings implements Configurable {
     private JTextField proxyHost;
     private JTextField proxyPort;
     private JCheckBox proxyEnable;
+    private JTextField authUserName;
+    private JPasswordField authPassword;
+    private JCheckBox enableAuth;
 
     public Settings() {
         this.bundle = ResourceBundle.getBundle("i18n/describe");
+        proxyPort.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (!isPortOrEmpty(proxyPort.getText())) {
+                    proxyPort.setText("");
+                }
+            }
+        });
+    }
+
+    private static boolean isPortOrEmpty(String text) {
+        if (StringUtils.isEmpty(text)) {
+            return true;
+        }
+        try {
+            var port = Integer.parseInt(text);
+            return port >= 0 && port <= 65535;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+
+    private static String showString(char[] str) {
+        if (str == null || str.length == 0) {
+            return "";
+        } else {
+            return new String(str);
+        }
     }
 
     @Override
@@ -48,30 +82,32 @@ public class Settings implements Configurable {
         protocol.addItem("HTTPS");
         protocol.addItem("SOCKS4");
         protocol.addItem("SOCKS5");
-        proxyEnable.addChangeListener(e -> {
-            actionOnSelect(proxyEnable.isSelected());
-        });
+        proxyEnable.addChangeListener(e -> actionOnSelect());
+        enableAuth.addChangeListener(e -> actionOnSelect());
         return rootPanel;
     }
 
-    private void actionOnSelect(boolean select) {
+    private void actionOnSelect() {
+        var select = proxyEnable.isSelected();
         protocol.setEnabled(select);
         proxyHost.setEnabled(select);
         proxyPort.setEnabled(select);
+        enableAuth.setEnabled(select);
+        var select2 = enableAuth.isSelected();
+        authUserName.setEnabled(select && select2);
+        authPassword.setEnabled(select && select2);
     }
 
     @Override
     public boolean isModified() {
         var state = Objects.requireNonNull(AppSettings.getInstance().getState());
-        if (!Objects.equals(state.isProxyEnable(), proxyEnable.isSelected())) {
-            return true;
-        } else if (!Objects.equals(state.getProxyProtocol(), protocol.getSelectedItem())) {
-            return true;
-        } else if (!Objects.equals(state.getProxyHost(), proxyHost.getText())) {
-            return true;
-        } else {
-            return !Objects.equals(state.getProxyPort(), proxyPort.getText());
-        }
+        return !Objects.equals(state.isProxyEnable(), proxyEnable.isSelected())
+                || !Objects.equals(state.getProxyProtocol(), protocol.getSelectedItem())
+                || !Objects.equals(state.getProxyHost(), proxyHost.getText())
+                || !Objects.equals(state.getProxyPort(), proxyPort.getText())
+                || !Objects.equals(state.isEnableAuth(), enableAuth.isSelected())
+                || !Objects.equals(state.getAuthUserName(), authUserName.getText())
+                || !Objects.equals(state.getAuthPassword(), showString(authPassword.getPassword()));
     }
 
     @Override
@@ -81,7 +117,10 @@ public class Settings implements Configurable {
         state.setProxyProtocol((String) protocol.getSelectedItem());
         state.setProxyHost(proxyHost.getText());
         state.setProxyPort(proxyPort.getText());
-        actionOnSelect(proxyEnable.isSelected());
+        state.setEnableAuth(enableAuth.isSelected());
+        state.setAuthUserName(authUserName.getText());
+        state.setAuthPassword(showString(authPassword.getPassword()));
+        actionOnSelect();
     }
 
     @Override
@@ -91,6 +130,9 @@ public class Settings implements Configurable {
         protocol.setSelectedItem(state.getProxyProtocol());
         proxyHost.setText(state.getProxyHost());
         proxyPort.setText(state.getProxyPort());
-        actionOnSelect(proxyEnable.isSelected());
+        enableAuth.setSelected(state.isEnableAuth());
+        authUserName.setText(state.getAuthUserName());
+        authPassword.setText(state.getAuthPassword());
+        actionOnSelect();
     }
 }
