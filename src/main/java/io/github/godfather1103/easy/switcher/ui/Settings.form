@@ -21,7 +21,7 @@
               <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <toolTipText resource-bundle="i18n/describe" key="protocolDesc"/>
+              <toolTipText resource-bundle="messages/config" key="protocolDesc"/>
             </properties>
           </component>
           <component id="2bde5" class="javax.swing.JTextField" binding="proxyHost">
@@ -38,8 +38,8 @@
             </constraints>
             <properties>
               <selected value="false"/>
-              <text resource-bundle="i18n/describe" key="enableProxy"/>
-              <toolTipText resource-bundle="i18n/describe" key="enableProxyDesc"/>
+              <text resource-bundle="messages/config" key="enableProxy"/>
+              <toolTipText resource-bundle="messages/config" key="enableProxyDesc"/>
             </properties>
           </component>
           <component id="d3d9c" class="javax.swing.JTextField" binding="proxyPort">
@@ -55,7 +55,7 @@
               <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text resource-bundle="i18n/describe" key="hostname"/>
+              <text resource-bundle="messages/config" key="hostname"/>
             </properties>
           </component>
           <component id="450ae" class="javax.swing.JLabel">
@@ -63,7 +63,7 @@
               <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text resource-bundle="i18n/describe" key="port"/>
+              <text resource-bundle="messages/config" key="port"/>
             </properties>
           </component>
           <component id="8af0a" class="javax.swing.JLabel">
@@ -71,7 +71,7 @@
               <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text resource-bundle="i18n/describe" key="user"/>
+              <text resource-bundle="messages/config" key="user"/>
             </properties>
           </component>
           <component id="b48ee" class="javax.swing.JLabel">
@@ -79,7 +79,7 @@
               <grid row="1" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text resource-bundle="i18n/describe" key="password"/>
+              <text resource-bundle="messages/config" key="password"/>
             </properties>
           </component>
           <component id="cb16f" class="javax.swing.JTextField" binding="authUserName">
@@ -103,7 +103,7 @@
               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text resource-bundle="i18n/describe" key="enableAuth"/>
+              <text resource-bundle="messages/config" key="enableAuth"/>
             </properties>
           </component>
         </children>

@@ -27,12 +27,11 @@
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
-        <applicationConfigurable
+        <applicationConfigurable bundle="messages.config"
                 groupId="appearance"
                 groupWeight="20"
                 id="io.github.godfather1103.easy-switcher-plugin"
                 dynamic="true"
-                displayName="Easy Switcher Configuration"
                 provider="io.github.godfather1103.easy.switcher.settings.AppSettingsConfigurableProvider"
         />
     </extensions>

@@ -3,6 +3,7 @@ package io.github.godfather1103.easy.switcher.ui;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.util.NlsContexts;
 import io.github.godfather1103.easy.switcher.settings.AppSettings;
+import io.github.godfather1103.easy.switcher.settings.ConfigBundle;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,7 +12,7 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.ResourceBundle;
+
 
 /**
  * <p>Title:        Godfather1103's Github</p>
@@ -26,7 +27,6 @@ import java.util.ResourceBundle;
  */
 public class Settings implements Configurable {
 
-    private final ResourceBundle bundle;
     private JComboBox protocol;
     private JPanel rootPanel;
     private JTextField proxyHost;
@@ -37,7 +37,6 @@ public class Settings implements Configurable {
     private JCheckBox enableAuth;
 
     public Settings() {
-        this.bundle = ResourceBundle.getBundle("i18n/describe");
         proxyPort.addFocusListener(new FocusAdapter() {
             @Override
             public void focusLost(FocusEvent e) {
@@ -71,7 +70,7 @@ public class Settings implements Configurable {
 
     @Override
     public @NlsContexts.ConfigurableName String getDisplayName() {
-        return Optional.of(bundle.getString("display_name"))
+        return Optional.ofNullable(ConfigBundle.message("display_name"))
                 .filter(StringUtils::isNotEmpty)
                 .orElse("Easy Switcher Configuration");
     }
