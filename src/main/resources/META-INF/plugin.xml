@@ -20,6 +20,10 @@
             <p>代理快速切换</a></p>
   ]]></description>
 
+    <applicationListeners>
+        <listener class="io.github.godfather1103.easy.switcher.LoadCustomProxy"
+                  topic="com.intellij.ide.AppLifecycleListener"/>
+    </applicationListeners>
     <!-- Product and plugin compatibility requirements.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
@@ -34,5 +38,6 @@
                 dynamic="true"
                 provider="io.github.godfather1103.easy.switcher.settings.AppSettingsConfigurableProvider"
         />
+        <postStartupActivity implementation="io.github.godfather1103.easy.switcher.LoadCustomProxy"/>
     </extensions>
 </idea-plugin>

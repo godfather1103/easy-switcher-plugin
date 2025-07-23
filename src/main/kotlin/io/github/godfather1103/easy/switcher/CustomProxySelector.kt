@@ -1,11 +1,12 @@
 package io.github.godfather1103.easy.switcher
 
-import com.intellij.ide.ApplicationInitializedListener
+import com.intellij.ide.AppLifecycleListener
 import com.intellij.openapi.diagnostic.debug
 import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.project.ProjectManagerListener
 import com.intellij.openapi.startup.ProjectActivity
+import com.intellij.util.net.JdkProxyCustomizer
+import com.intellij.util.net.JdkProxyProvider
 import com.intellij.util.net.NO_PROXY_LIST
 import java.io.IOException
 import java.net.Proxy
@@ -28,7 +29,8 @@ class CustomProxySelector : ProxySelector() {
             logger.debug { "$uri: no proxy, localhost" }
             return NO_PROXY_LIST
         }
-        TODO("Not yet implemented")
+        println("请求的url=$uri")
+        return emptyList()
     }
 
     fun isLocalhost(hostName: String): Boolean {
@@ -36,7 +38,7 @@ class CustomProxySelector : ProxySelector() {
     }
 
     override fun connectFailed(uri: URI?, sa: SocketAddress?, ioe: IOException?) {
-        TODO("Not yet implemented")
+
     }
 
     companion object {
@@ -46,9 +48,14 @@ class CustomProxySelector : ProxySelector() {
     }
 }
 
-private class LoadCustomProxy : ProjectActivity, ProjectManagerListener {
+private class LoadCustomProxy : ProjectActivity, AppLifecycleListener {
     override suspend fun execute(project: Project) {
-        TODO("Not yet implemented")
+        JdkProxyProvider.getInstance().proxySelector.select(URI(CustomProxySelector::class.java.name))
+        JdkProxyCustomizer.getInstance().customizeProxySelector(CustomProxySelector())
+        TODO("通过state标识是否为true控制首次加载，APP关闭后变更标识为false")
     }
 
+    override fun appWillBeClosed(isRestart: Boolean) {
+        TODO()
+    }
 }
