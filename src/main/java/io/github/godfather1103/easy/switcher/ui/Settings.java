@@ -3,6 +3,7 @@ package io.github.godfather1103.easy.switcher.ui;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.util.NlsContexts;
 import com.intellij.ui.JBColor;
+import io.github.godfather1103.easy.switcher.CustomProxySelector;
 import io.github.godfather1103.easy.switcher.settings.AppSettings;
 import io.github.godfather1103.easy.switcher.settings.ConfigBundle;
 import io.github.godfather1103.easy.switcher.util.HttpUtils;
@@ -12,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.net.Proxy;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -85,10 +87,8 @@ public class Settings implements Configurable {
 
     @Override
     public @Nullable JComponent createComponent() {
-        protocol.addItem("HTTP");
-        protocol.addItem("HTTPS");
-        protocol.addItem("SOCKS4");
-        protocol.addItem("SOCKS5");
+        protocol.addItem(Proxy.Type.HTTP.name());
+        protocol.addItem(Proxy.Type.SOCKS.name());
         proxyEnable.addChangeListener(e -> actionOnSelect());
         enableAuth.addChangeListener(e -> actionOnSelect());
         return rootPanel;
@@ -109,14 +109,14 @@ public class Settings implements Configurable {
     @Override
     public boolean isModified() {
         var state = Objects.requireNonNull(AppSettings.getInstance().getState());
-        return !Objects.equals(state.isProxyEnable(), proxyEnable.isSelected())
+        return !Objects.equals(state.getProxyEnable(), proxyEnable.isSelected())
                 || !Objects.equals(state.getProxyProtocol(), protocol.getSelectedItem())
                 || !Objects.equals(state.getProxyHost(), proxyHost.getText())
                 || !Objects.equals(state.getProxyPort(), proxyPort.getText())
                 || !Objects.equals(state.getDownloadProfile(), downloadProfile.getText())
                 || !Objects.equals(state.getProfileUrl(), profileUrl.getText())
                 || !Objects.equals(state.getCustomProfile(), customProfile.getText())
-                || !Objects.equals(state.isEnableAuth(), enableAuth.isSelected())
+                || !Objects.equals(state.getEnableAuth(), enableAuth.isSelected())
                 || !Objects.equals(state.getAuthUserName(), authUserName.getText())
                 || !Objects.equals(state.getAuthPassword(), showString(authPassword.getPassword()));
     }
@@ -140,21 +140,23 @@ public class Settings implements Configurable {
             downloadProfile.setText(text);
             state.setDownloadProfile(text);
         }
+        CustomProxySelector.Companion.reset(state);
     }
 
     @Override
     public void reset() {
         var state = Objects.requireNonNull(AppSettings.getInstance().getState());
-        proxyEnable.setSelected(state.isProxyEnable());
+        proxyEnable.setSelected(state.getProxyEnable());
         protocol.setSelectedItem(state.getProxyProtocol());
         proxyHost.setText(state.getProxyHost());
         proxyPort.setText(state.getProxyPort());
-        enableAuth.setSelected(state.isEnableAuth());
+        enableAuth.setSelected(state.getEnableAuth());
         authUserName.setText(state.getAuthUserName());
         authPassword.setText(state.getAuthPassword());
         profileUrl.setText(state.getProfileUrl());
         downloadProfile.setText(state.getDownloadProfile());
         customProfile.setText(state.getCustomProfile());
         actionOnSelect();
+        CustomProxySelector.Companion.reset(state);
     }
 }
