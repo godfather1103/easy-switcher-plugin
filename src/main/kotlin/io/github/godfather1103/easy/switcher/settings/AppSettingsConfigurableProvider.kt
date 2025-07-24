@@ -16,5 +16,5 @@ import io.github.godfather1103.easy.switcher.ui.Settings
  * @since 1.0
  */
 class AppSettingsConfigurableProvider : ConfigurableProvider() {
-    override fun createConfigurable(): Configurable? = Settings()
+    override fun createConfigurable(): Configurable = Settings()
 }

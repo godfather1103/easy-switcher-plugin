@@ -12,9 +12,7 @@ internal class LoadCustomProxy : ProjectActivity {
         val proxy = JdkProxyProvider.getInstance().proxySelector.select(URI(CustomProxySelector::class.java.name))
         if (proxy == null || proxy.isEmpty() || !proxy.contains(CustomProxySelector.DEFAULT_PROXY)) {
             JdkProxyCustomizer.getInstance().customizeProxySelector(CustomProxySelector.INSTANCE)
-            AppSettings.getInstance().state?.apply {
-                CustomProxySelector.reset(this)
-            }
+            CustomProxySelector.reset(AppSettings.instance.state)
         }
     }
 
