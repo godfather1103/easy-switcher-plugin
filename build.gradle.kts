@@ -54,7 +54,7 @@ intellijPlatform {
     }
     pluginConfiguration {
         ideaVersion {
-            sinceBuild = "221"
+            sinceBuild = "242"
         }
         changeNotes = """
       Initial version(初始版本)

@@ -46,3 +46,21 @@ This project is licensed under the corresponding open source license. See the LI
 - Project URLs:
   - https://gitee.com/godfather1103/easy-switcher-plugin
   - https://github.com/godfather1103/easy-switcher-plugin
+
+
+# Donate
+
+Your gift will help me to contribute better, thank you!
+
+[PayPal](https://paypal.me/godfather1103?locale.x=zh_XC)
+
+Alipay
+![Alipay](pic/hb-300.png)
+![Alipay](pic/Alipay-300.png)
+
+WeChat  
+![WeChat](pic/WeChat-300.png)
+
+# Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=godfather1103/easy-switcher-plugin&type=Date)](https://star-history.com/#godfather1103/easy-switcher-plugin&Date)
