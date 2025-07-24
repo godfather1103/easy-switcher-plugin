@@ -16,10 +16,10 @@
 Automatically switch proxies based on autoproxy rules.(基于autoproxy规则自动切换代理。)
 ]]></description>
 
-    <!--    <applicationListeners>-->
-    <!--        <listener class="io.github.godfather1103.easy.switcher.LoadCustomProxy"-->
-    <!--                  topic="com.intellij.ide.AppLifecycleListener"/>-->
-    <!--    </applicationListeners>-->
+    <applicationListeners>
+        <listener class="io.github.godfather1103.easy.switcher.LoadCustomProxy"
+                  topic="com.intellij.ide.AppLifecycleListener"/>
+    </applicationListeners>
     <!-- Product and plugin compatibility requirements.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
