@@ -121,6 +121,8 @@ internal class CustomProxySelector(
             "^(https?:\\/\\/)?([^.]+\\.)*" + rule.substring(2).replace(".", "\\.") + ".*"
         } else if (rule.startsWith("|")) {
             "^" + rule.substring(1).replace(".", "\\.")
+        } else if (rule.startsWith("/") && rule.endsWith("/")) {
+            rule.substring(1, rule.length - 1)
         } else {
             rule.replace(".", "\\.").replace("*", ".*")
         }
