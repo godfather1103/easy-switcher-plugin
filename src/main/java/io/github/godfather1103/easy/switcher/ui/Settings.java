@@ -7,6 +7,7 @@ import io.github.godfather1103.easy.switcher.CustomProxySelector;
 import io.github.godfather1103.easy.switcher.settings.AppSettings;
 import io.github.godfather1103.easy.switcher.settings.ConfigBundle;
 import io.github.godfather1103.easy.switcher.util.HttpUtils;
+import io.github.godfather1103.easy.switcher.util.MyNotifier;
 import io.github.godfather1103.easy.switcher.util.StringUtils;
 import org.jetbrains.annotations.Nullable;
 
@@ -153,20 +154,23 @@ public class Settings implements Configurable {
     }
 
     private void actionOnSelect() {
-        var select = enableProxy.isSelected();
-        protocol.setEnabled(select);
-        proxyHost.setEnabled(select);
-        proxyPort.setEnabled(select);
-        enableAuth.setEnabled(select);
-        var select2 = enableAuth.isSelected();
-        authUserName.setEnabled(select && select2);
-        authPassword.setEnabled(select && select2);
+        var selected = enableProxy.isSelected();
+        protocol.setEnabled(selected);
+        if (selected && protocol.getSelectedIndex() == -1) {
+            protocol.setSelectedItem(Proxy.Type.HTTP.name());
+        }
+        proxyHost.setEnabled(selected);
+        proxyPort.setEnabled(selected);
+        enableAuth.setEnabled(selected);
+        var authSelected = enableAuth.isSelected();
+        authUserName.setEnabled(selected && authSelected);
+        authPassword.setEnabled(selected && authSelected);
         downProfileButton.setEnabled(StringUtils.isUrl(profileUrl.getText()));
     }
 
     @Override
     public boolean isModified() {
-        var state = Objects.requireNonNull(AppSettings.getInstance().getState());
+        var state = AppSettings.getInstance().getState();
         return !Objects.equals(state.getEnableProxy(), enableProxy.isSelected())
                 || !Objects.equals(state.getProxyProtocol(), protocol.getSelectedItem())
                 || !Objects.equals(state.getProxyHost(), proxyHost.getText())
@@ -181,7 +185,21 @@ public class Settings implements Configurable {
 
     @Override
     public void apply() {
-        var state = Objects.requireNonNull(AppSettings.getInstance().getState());
+        if (enableProxy.isSelected()) {
+            if (StringUtils.isEmpty(proxyHost.getText())) {
+                MyNotifier.notifyError(ConfigBundle.message("notifier.error.miss.proxy.host"));
+                return;
+            }
+            if (!StringUtils.isPortOrEmpty(proxyPort.getText())) {
+                MyNotifier.notifyError(ConfigBundle.message("notifier.error.miss.proxy.port"));
+                return;
+            }
+            if (protocol.getSelectedIndex() == -1) {
+                MyNotifier.notifyError(ConfigBundle.message("notifier.error.miss.proxy.protocol"));
+                return;
+            }
+        }
+        var state = AppSettings.getInstance().getState();
         state.setEnableProxy(enableProxy.isSelected());
         state.setProxyProtocol((String) protocol.getSelectedItem());
         state.setProxyHost(proxyHost.getText());
@@ -206,7 +224,7 @@ public class Settings implements Configurable {
 
     @Override
     public void reset() {
-        var state = Objects.requireNonNull(AppSettings.getInstance().getState());
+        var state = AppSettings.getInstance().getState();
         enableProxy.setSelected(state.getEnableProxy());
         protocol.setSelectedItem(state.getProxyProtocol());
         proxyHost.setText(state.getProxyHost());

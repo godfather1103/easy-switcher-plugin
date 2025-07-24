@@ -20,10 +20,10 @@
 <p>基于autoproxy规则自动切换代理</a></p>
   ]]></description>
 
-<!--    <applicationListeners>-->
-<!--        <listener class="io.github.godfather1103.easy.switcher.LoadCustomProxy"-->
-<!--                  topic="com.intellij.ide.AppLifecycleListener"/>-->
-<!--    </applicationListeners>-->
+    <!--    <applicationListeners>-->
+    <!--        <listener class="io.github.godfather1103.easy.switcher.LoadCustomProxy"-->
+    <!--                  topic="com.intellij.ide.AppLifecycleListener"/>-->
+    <!--    </applicationListeners>-->
     <!-- Product and plugin compatibility requirements.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
@@ -40,5 +40,11 @@
                                  provider="io.github.godfather1103.easy.switcher.settings.AppSettingsConfigurableProvider"
         />
         <postStartupActivity implementation="io.github.godfather1103.easy.switcher.LoadCustomProxy"/>
+        <notificationGroup
+                displayType="BALLOON"
+                id="io.github.godfather1103.easy-switcher-plugin.notificationGroup"
+                bundle="messages.config"
+                key="notification.group.name"
+        />
     </extensions>
 </idea-plugin>

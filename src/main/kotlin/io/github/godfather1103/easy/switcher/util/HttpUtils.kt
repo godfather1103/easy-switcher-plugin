@@ -35,7 +35,7 @@ object HttpUtils {
         .build()
 
     @JvmStatic
-    fun downAutoproxyRule(url: String): String? {
+    fun downAutoproxyRule(url: String): String {
         if (isUrl(url)) {
             val request = Request.Builder()
                 .url(url)
@@ -51,7 +51,7 @@ object HttpUtils {
                     }
                 }
                 return@of ""
-            }.getOrElseThrow(Function { e: Throwable? -> RuntimeException(e) })
+            }.getOrElseThrow(Function { e: Throwable -> RuntimeException(e) })
         }
         return ""
     }

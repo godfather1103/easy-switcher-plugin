@@ -25,7 +25,7 @@ object StringUtils {
         try {
             val port = text!!.toInt()
             return port >= 0 && port <= 65535
-        } catch (e: NumberFormatException) {
+        } catch (_: NumberFormatException) {
             return false
         }
     }
