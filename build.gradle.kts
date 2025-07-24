@@ -56,15 +56,8 @@ intellijPlatform {
         ideaVersion {
             sinceBuild = "221"
         }
-        description = """
-            <h1>English Readme：</h1>
-            <p>Automatically switch proxies based on autoproxy rules</p>
-        
-            <h1>中文说明：</h1>
-            <p>基于autoproxy规则自动切换代理</a></p>
-    """.trimIndent()
         changeNotes = """
-      Initial version
+      Initial version(初始版本)
     """.trimIndent()
     }
 }
