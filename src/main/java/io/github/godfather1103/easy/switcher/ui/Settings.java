@@ -3,7 +3,7 @@ package io.github.godfather1103.easy.switcher.ui;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.util.NlsContexts;
 import com.intellij.ui.JBColor;
-import io.github.godfather1103.easy.switcher.CustomProxySelector;
+import io.github.godfather1103.easy.switcher.CustomProxy;
 import io.github.godfather1103.easy.switcher.settings.AppSettings;
 import io.github.godfather1103.easy.switcher.settings.ConfigBundle;
 import io.github.godfather1103.easy.switcher.util.HttpUtils;
@@ -219,7 +219,7 @@ public class Settings implements Configurable {
             downloadProfile.setText("");
             state.setDownloadProfile("");
         }
-        CustomProxySelector.Companion.reset(state);
+        CustomProxy.Companion.reset(state);
     }
 
     @Override
@@ -236,6 +236,6 @@ public class Settings implements Configurable {
         downloadProfile.setText(state.getDownloadProfile());
         customProfile.setText(state.getCustomProfile());
         actionOnSelect();
-        CustomProxySelector.Companion.reset(state);
+        CustomProxy.Companion.reset(state);
     }
 }

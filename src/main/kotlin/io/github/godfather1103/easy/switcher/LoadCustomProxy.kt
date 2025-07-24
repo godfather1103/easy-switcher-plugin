@@ -10,9 +10,10 @@ import java.net.URI
 internal class LoadCustomProxy : ProjectActivity {
     override suspend fun execute(project: Project) {
         val proxy = JdkProxyProvider.getInstance().proxySelector.select(URI(CustomProxySelector::class.java.name))
-        if (proxy == null || proxy.isEmpty() || !proxy.contains(CustomProxySelector.DEFAULT_PROXY)) {
+        if (proxy == null || proxy.isEmpty() || !proxy.contains(CustomProxy.DEFAULT_PROXY)) {
             JdkProxyCustomizer.getInstance().customizeProxySelector(CustomProxySelector.INSTANCE)
-            CustomProxySelector.reset(AppSettings.instance.state)
+            JdkProxyCustomizer.getInstance().customizeAuthenticator(CustomProxyAuthenticator.INSTANCE)
+            CustomProxy.reset(AppSettings.instance.state)
         }
     }
 
