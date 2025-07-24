@@ -48,10 +48,68 @@ public class Settings implements Configurable {
     private JTextArea downloadProfile;
     private JTextArea customProfile;
     private JButton downProfileButton;
+    private JLabel hostname;
+    private JLabel port;
+    private JLabel user;
+    private JLabel password;
+    private JLabel downloadedRules;
+    private JLabel customRules;
 
     public Settings() {
+    }
 
+    @Override
+    public @NlsContexts.ConfigurableName String getDisplayName() {
+        return Optional.of(ConfigBundle.message("plugin.config.tab.title"))
+                .filter(StringUtils::isNotEmpty)
+                .orElse("Easy Switcher Configuration");
+    }
 
+    private void addDesc() {
+        enableProxy.setText(ConfigBundle.message("enableProxy"));
+        enableProxy.setToolTipText(ConfigBundle.message("enableProxyDesc"));
+
+        protocol.setToolTipText(ConfigBundle.message("protocolDesc"));
+
+        hostname.setText(ConfigBundle.message("hostname"));
+        hostname.setToolTipText(ConfigBundle.message("hostname"));
+        proxyHost.setToolTipText(ConfigBundle.message("hostname"));
+
+        port.setText(ConfigBundle.message("port"));
+        port.setToolTipText(ConfigBundle.message("port"));
+        proxyPort.setToolTipText(ConfigBundle.message("port"));
+
+        enableAuth.setText(ConfigBundle.message("enableAuth"));
+
+        user.setText(ConfigBundle.message("user"));
+        user.setToolTipText(ConfigBundle.message("user"));
+        authUserName.setToolTipText(ConfigBundle.message("user"));
+
+        password.setText(ConfigBundle.message("password"));
+        password.setToolTipText(ConfigBundle.message("password"));
+        authPassword.setToolTipText(ConfigBundle.message("password"));
+
+        downProfileButton.setText(ConfigBundle.message("downloadProfileNow"));
+        downProfileButton.setToolTipText(ConfigBundle.message("downloadProfileNow"));
+
+        profileUrl.setToolTipText(ConfigBundle.message("profileUrl"));
+
+        downloadedRules.setText(ConfigBundle.message("downloadProfile"));
+        downloadedRules.setToolTipText(ConfigBundle.message("downloadProfile"));
+        downloadProfile.setToolTipText(ConfigBundle.message("downloadProfileDesc"));
+
+        customRules.setText(ConfigBundle.message("customProfile"));
+        customRules.setToolTipText(ConfigBundle.message("customProfile"));
+        customProfile.setToolTipText(ConfigBundle.message("customProfileDesc"));
+    }
+
+    @Override
+    public @Nullable JComponent createComponent() {
+        protocol.addItem(Proxy.Type.HTTP.name());
+        protocol.addItem(Proxy.Type.SOCKS.name());
+        addDesc();
+        enableProxy.addChangeListener(e -> actionOnSelect());
+        enableAuth.addChangeListener(e -> actionOnSelect());
         proxyPort.addFocusListener(new FocusAdapter() {
             @Override
             public void focusLost(FocusEvent e) {
@@ -91,21 +149,6 @@ public class Settings implements Configurable {
         downloadProfile.setEditable(false);
         customProfile.setBorder(BorderFactory.createLineBorder(JBColor.LIGHT_GRAY));
         customProfile.setAutoscrolls(true);
-    }
-
-    @Override
-    public @NlsContexts.ConfigurableName String getDisplayName() {
-        return Optional.of(ConfigBundle.message("plugin.config.tab.title"))
-                .filter(StringUtils::isNotEmpty)
-                .orElse("Easy Switcher Configuration");
-    }
-
-    @Override
-    public @Nullable JComponent createComponent() {
-        protocol.addItem(Proxy.Type.HTTP.name());
-        protocol.addItem(Proxy.Type.SOCKS.name());
-        enableProxy.addChangeListener(e -> actionOnSelect());
-        enableAuth.addChangeListener(e -> actionOnSelect());
         return rootPanel;
     }
 
