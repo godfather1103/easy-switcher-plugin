@@ -32,11 +32,12 @@
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
         <applicationConfigurable bundle="messages.config"
-                groupId="appearance"
-                groupWeight="20"
-                id="io.github.godfather1103.easy-switcher-plugin"
-                dynamic="true"
-                provider="io.github.godfather1103.easy.switcher.settings.AppSettingsConfigurableProvider"
+                                 groupId="appearance"
+                                 groupWeight="20"
+                                 id="io.github.godfather1103.easy-switcher-plugin"
+                                 dynamic="true"
+                                 displayName="Easy Switcher Configuration"
+                                 provider="io.github.godfather1103.easy.switcher.settings.AppSettingsConfigurableProvider"
         />
         <postStartupActivity implementation="io.github.godfather1103.easy.switcher.LoadCustomProxy"/>
     </extensions>
