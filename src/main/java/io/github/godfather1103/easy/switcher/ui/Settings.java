@@ -65,7 +65,7 @@ public class Settings implements Configurable {
                 .orElse("Easy Switcher Configuration");
     }
 
-    private void addDesc() {
+    private void addI18Desc() {
         enableProxy.setText(ConfigBundle.message("enableProxy"));
         enableProxy.setToolTipText(ConfigBundle.message("enableProxyDesc"));
 
@@ -107,7 +107,7 @@ public class Settings implements Configurable {
     public @Nullable JComponent createComponent() {
         protocol.addItem(Proxy.Type.HTTP.name());
         protocol.addItem(Proxy.Type.SOCKS.name());
-        addDesc();
+        addI18Desc();
         enableProxy.addChangeListener(e -> actionOnSelect());
         enableAuth.addChangeListener(e -> actionOnSelect());
         proxyPort.addFocusListener(new FocusAdapter() {
