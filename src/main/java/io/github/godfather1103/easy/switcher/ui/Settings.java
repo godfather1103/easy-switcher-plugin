@@ -11,6 +11,8 @@ import io.github.godfather1103.easy.switcher.util.StringUtils;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.net.Proxy;
@@ -56,9 +58,19 @@ public class Settings implements Configurable {
                 }
             }
         });
-        profileUrl.addFocusListener(new FocusAdapter() {
+        profileUrl.getDocument().addDocumentListener(new DocumentListener() {
             @Override
-            public void focusLost(FocusEvent e) {
+            public void insertUpdate(DocumentEvent e) {
+                downProfileButton.setEnabled(StringUtils.isUrl(profileUrl.getText()));
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                downProfileButton.setEnabled(StringUtils.isUrl(profileUrl.getText()));
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
                 downProfileButton.setEnabled(StringUtils.isUrl(profileUrl.getText()));
             }
         });
@@ -74,13 +86,14 @@ public class Settings implements Configurable {
         });
         downloadProfile.setBorder(BorderFactory.createLineBorder(JBColor.LIGHT_GRAY));
         downloadProfile.setAutoscrolls(true);
+        downloadProfile.setEditable(false);
         customProfile.setBorder(BorderFactory.createLineBorder(JBColor.LIGHT_GRAY));
         customProfile.setAutoscrolls(true);
     }
 
     @Override
     public @NlsContexts.ConfigurableName String getDisplayName() {
-        return Optional.ofNullable(ConfigBundle.message("display_name"))
+        return Optional.of(ConfigBundle.message("display_name"))
                 .filter(StringUtils::isNotEmpty)
                 .orElse("Easy Switcher Configuration");
     }
@@ -139,6 +152,9 @@ public class Settings implements Configurable {
             String text = HttpUtils.downAutoproxyRule(profileUrl.getText());
             downloadProfile.setText(text);
             state.setDownloadProfile(text);
+        } else if (StringUtils.isEmpty(profileUrl.getText())) {
+            downloadProfile.setText("");
+            state.setDownloadProfile("");
         }
         CustomProxySelector.Companion.reset(state);
     }
