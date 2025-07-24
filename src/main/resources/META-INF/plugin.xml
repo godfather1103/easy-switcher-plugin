@@ -36,7 +36,7 @@
                                  groupWeight="20"
                                  id="io.github.godfather1103.easy-switcher-plugin"
                                  dynamic="true"
-                                 key="display_name"
+                                 key="plugin.config.tab.title"
                                  provider="io.github.godfather1103.easy.switcher.settings.AppSettingsConfigurableProvider"
         />
         <postStartupActivity implementation="io.github.godfather1103.easy.switcher.LoadCustomProxy"/>

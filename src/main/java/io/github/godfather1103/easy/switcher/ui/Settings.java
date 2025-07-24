@@ -95,7 +95,7 @@ public class Settings implements Configurable {
 
     @Override
     public @NlsContexts.ConfigurableName String getDisplayName() {
-        return Optional.of(ConfigBundle.message("display_name"))
+        return Optional.of(ConfigBundle.message("plugin.config.tab.title"))
                 .filter(StringUtils::isNotEmpty)
                 .orElse("Easy Switcher Configuration");
     }
