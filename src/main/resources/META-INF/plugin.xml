@@ -13,12 +13,8 @@
     <!-- Description of the plugin displayed on the Plugin Page and IDE Plugin Manager.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
     <description><![CDATA[
-<h1>English Readme：</h1>
-<p>Automatically switch proxies based on autoproxy rules</p>
-
-<h1>中文说明：</h1>
-<p>基于autoproxy规则自动切换代理</a></p>
-  ]]></description>
+Automatically switch proxies based on autoproxy rules.(基于autoproxy规则自动切换代理。)
+]]></description>
 
     <!--    <applicationListeners>-->
     <!--        <listener class="io.github.godfather1103.easy.switcher.LoadCustomProxy"-->
