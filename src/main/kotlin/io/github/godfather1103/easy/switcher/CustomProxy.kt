@@ -1,6 +1,8 @@
 package io.github.godfather1103.easy.switcher
 
 import com.intellij.openapi.diagnostic.logger
+import com.intellij.util.net.JdkProxyCustomizer
+import com.intellij.util.net.JdkProxyProvider
 import io.github.godfather1103.easy.switcher.settings.AppSettings
 import io.github.godfather1103.easy.switcher.util.StringUtils
 import io.vavr.Tuple
@@ -61,6 +63,17 @@ internal class CustomProxy(
             INSTANCE.rules.addAll(exclude)
             INSTANCE.rules.addAll(contains)
             logger.info("加载了${INSTANCE.rules.size}条规则")
+
+            val proxy = JdkProxyProvider.getInstance().proxySelector.select(DEFAULT_URI)
+            if (proxy == null || proxy.isEmpty() || !proxy.contains(DEFAULT_PROXY)) {
+                JdkProxyCustomizer.getInstance().customizeProxySelector(CustomProxySelector.INSTANCE)
+            }
+            val pass = JdkProxyProvider.getInstance().authenticator.requestPasswordAuthenticationInstance(
+                DEFAULT_URI.toString(), null, 0, null, null, null, null, null
+            )
+            if (pass == null) {
+                JdkProxyCustomizer.getInstance().customizeAuthenticator(CustomProxyAuthenticator.INSTANCE)
+            }
         }
 
         private fun parseRule(rules: String): Tuple2<List<ProxyRule>, List<ProxyRule>> {
