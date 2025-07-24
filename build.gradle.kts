@@ -19,7 +19,7 @@ repositories {
 // Configure Gradle IntelliJ Plugin
 // Read more: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin.html
 dependencies {
-    implementation("com.squareup.okhttp3:okhttp:3.12.3")
+    implementation("com.squareup.okhttp3:okhttp:4.9.2")
     implementation("io.vavr:vavr:0.10.4")
     testImplementation("junit:junit:4.13.2")
     compileOnly("org.projectlombok:lombok:${property("lombok.version")}")
@@ -58,10 +58,10 @@ intellijPlatform {
         }
         description = """
             <h1>English Readme：</h1>
-            <p>Easy Switcher</p>
+            <p>Automatically switch proxies based on autoproxy rules</p>
         
             <h1>中文说明：</h1>
-            <p>代理快速切换</a></p>
+            <p>基于autoproxy规则自动切换代理</a></p>
     """.trimIndent()
         changeNotes = """
       Initial version
