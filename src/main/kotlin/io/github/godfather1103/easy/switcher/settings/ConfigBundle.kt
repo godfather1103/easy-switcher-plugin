@@ -12,7 +12,4 @@ object ConfigBundle {
     @JvmStatic
     fun message(@NotNull @PropertyKey(resourceBundle = BUNDLE) key: String, vararg params: Any) =
         INSTANCE.getMessage(key, *params)
-
-    fun messagePointer(@NotNull @PropertyKey(resourceBundle = BUNDLE) key: String, vararg params: Any) =
-        INSTANCE.getLazyMessage(key, *params)
 }
