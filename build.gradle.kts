@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "io.github.godfather1103"
-version = "1.1"
+version = "1.2"
 
 repositories {
     mavenCentral()
@@ -57,7 +57,7 @@ intellijPlatform {
             sinceBuild = "242"
         }
         changeNotes = """
-      优化支持的idea版本
+      优化插件配置初次加载时机
     """.trimIndent()
     }
 }
