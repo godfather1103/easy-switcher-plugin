@@ -40,7 +40,7 @@ public class Settings implements Configurable {
     private JPanel rootPanel;
     private JTextField proxyHost;
     private JTextField proxyPort;
-    private JCheckBox proxyEnable;
+    private JCheckBox enableProxy;
     private JTextField authUserName;
     private JPasswordField authPassword;
     private JCheckBox enableAuth;
@@ -50,6 +50,8 @@ public class Settings implements Configurable {
     private JButton downProfileButton;
 
     public Settings() {
+
+
         proxyPort.addFocusListener(new FocusAdapter() {
             @Override
             public void focusLost(FocusEvent e) {
@@ -102,13 +104,13 @@ public class Settings implements Configurable {
     public @Nullable JComponent createComponent() {
         protocol.addItem(Proxy.Type.HTTP.name());
         protocol.addItem(Proxy.Type.SOCKS.name());
-        proxyEnable.addChangeListener(e -> actionOnSelect());
+        enableProxy.addChangeListener(e -> actionOnSelect());
         enableAuth.addChangeListener(e -> actionOnSelect());
         return rootPanel;
     }
 
     private void actionOnSelect() {
-        var select = proxyEnable.isSelected();
+        var select = enableProxy.isSelected();
         protocol.setEnabled(select);
         proxyHost.setEnabled(select);
         proxyPort.setEnabled(select);
@@ -122,7 +124,7 @@ public class Settings implements Configurable {
     @Override
     public boolean isModified() {
         var state = Objects.requireNonNull(AppSettings.getInstance().getState());
-        return !Objects.equals(state.getProxyEnable(), proxyEnable.isSelected())
+        return !Objects.equals(state.getEnableProxy(), enableProxy.isSelected())
                 || !Objects.equals(state.getProxyProtocol(), protocol.getSelectedItem())
                 || !Objects.equals(state.getProxyHost(), proxyHost.getText())
                 || !Objects.equals(state.getProxyPort(), proxyPort.getText())
@@ -137,7 +139,7 @@ public class Settings implements Configurable {
     @Override
     public void apply() {
         var state = Objects.requireNonNull(AppSettings.getInstance().getState());
-        state.setProxyEnable(proxyEnable.isSelected());
+        state.setEnableProxy(enableProxy.isSelected());
         state.setProxyProtocol((String) protocol.getSelectedItem());
         state.setProxyHost(proxyHost.getText());
         state.setProxyPort(proxyPort.getText());
@@ -162,7 +164,7 @@ public class Settings implements Configurable {
     @Override
     public void reset() {
         var state = Objects.requireNonNull(AppSettings.getInstance().getState());
-        proxyEnable.setSelected(state.getProxyEnable());
+        enableProxy.setSelected(state.getEnableProxy());
         protocol.setSelectedItem(state.getProxyProtocol());
         proxyHost.setText(state.getProxyHost());
         proxyPort.setText(state.getProxyPort());

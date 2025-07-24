@@ -69,7 +69,7 @@ internal class CustomProxySelector(
             INSTANCE.enableAuth = state.enableAuth
             INSTANCE.authUserName = state.authUserName
             INSTANCE.authPassword = state.authPassword
-            if (state.proxyEnable) {
+            if (state.enableProxy) {
                 INSTANCE.proxy = when (state.proxyProtocol) {
                     Proxy.Type.HTTP.name -> Proxy(
                         Proxy.Type.HTTP,

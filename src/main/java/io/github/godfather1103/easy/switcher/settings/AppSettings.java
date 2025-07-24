@@ -54,7 +54,7 @@ public final class AppSettings implements PersistentStateComponent<AppSettings.S
      * @since 1.0
      */
     public static class State {
-        private Boolean proxyEnable;
+        private Boolean enableProxy;
         private String proxyProtocol;
         private String proxyHost;
         private String proxyPort;
@@ -66,16 +66,16 @@ public final class AppSettings implements PersistentStateComponent<AppSettings.S
         private String customProfile;
 
         private State() {
-            this.proxyEnable = false;
+            this.enableProxy = false;
             this.enableAuth = false;
         }
 
-        public Boolean getProxyEnable() {
-            return proxyEnable;
+        public Boolean getEnableProxy() {
+            return enableProxy;
         }
 
-        public void setProxyEnable(Boolean proxyEnable) {
-            this.proxyEnable = proxyEnable;
+        public void setEnableProxy(Boolean proxyEnable) {
+            this.enableProxy = proxyEnable;
         }
 
         public String getProxyProtocol() {
