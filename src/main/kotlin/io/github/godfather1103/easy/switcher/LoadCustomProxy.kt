@@ -5,15 +5,19 @@ import com.intellij.openapi.startup.ProjectActivity
 import com.intellij.util.net.JdkProxyCustomizer
 import com.intellij.util.net.JdkProxyProvider
 import io.github.godfather1103.easy.switcher.settings.AppSettings
-import java.net.URI
 
 internal class LoadCustomProxy : ProjectActivity {
     override suspend fun execute(project: Project) {
-        val proxy = JdkProxyProvider.getInstance().proxySelector.select(URI(CustomProxySelector::class.java.name))
+        CustomProxy.reset(AppSettings.instance.state)
+        val proxy = JdkProxyProvider.getInstance().proxySelector.select(CustomProxy.DEFAULT_URI)
         if (proxy == null || proxy.isEmpty() || !proxy.contains(CustomProxy.DEFAULT_PROXY)) {
             JdkProxyCustomizer.getInstance().customizeProxySelector(CustomProxySelector.INSTANCE)
+        }
+        val pass = JdkProxyProvider.getInstance().authenticator.requestPasswordAuthenticationInstance(
+            CustomProxy.DEFAULT_URI.toString(), null, 0, null, null, null, null, null
+        )
+        if (pass == null) {
             JdkProxyCustomizer.getInstance().customizeAuthenticator(CustomProxyAuthenticator.INSTANCE)
-            CustomProxy.reset(AppSettings.instance.state)
         }
     }
 

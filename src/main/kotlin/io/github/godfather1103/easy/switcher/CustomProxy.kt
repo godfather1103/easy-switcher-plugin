@@ -7,6 +7,7 @@ import io.vavr.Tuple
 import io.vavr.Tuple2
 import java.net.InetSocketAddress
 import java.net.Proxy
+import java.net.URI
 
 internal class CustomProxy(
     val rules: ArrayList<ProxyRule> = ArrayList(0),
@@ -19,6 +20,8 @@ internal class CustomProxy(
         val DEFAULT_PROXY = Proxy(Proxy.Type.HTTP, InetSocketAddress(CustomProxy::class.java.name, 0))
         val INSTANCE = CustomProxy()
         private val logger = logger<CustomProxy>()
+
+        val DEFAULT_URI = URI(CustomProxy::class.java.name)
 
         fun reset(state: AppSettings.State) {
             // 重置

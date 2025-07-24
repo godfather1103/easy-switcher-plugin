@@ -17,7 +17,7 @@ internal class CustomProxySelector : ProxySelector() {
             return emptyList()
         }
         val url = uri.toString()
-        if (url == CustomProxySelector::class.java.name) {
+        if (CustomProxy.DEFAULT_URI == uri) {
             logger.info("$uri: no proxy, uri is default marked is init")
             return listOf(CustomProxy.DEFAULT_PROXY)
         }
