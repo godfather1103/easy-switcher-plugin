@@ -34,7 +34,7 @@ dependencies {
 }
 
 intellijPlatform {
-    sandboxContainer.set(file("idea-sandbox"))
+    sandboxContainer.set(file("build/idea-sandbox"))
     signing {
         cliPath = file("${project.projectDir.absolutePath}/tools/marketplace-zip-signer-cli.jar")
         project.findProperty("signing.certificateChainFile")?.let {
