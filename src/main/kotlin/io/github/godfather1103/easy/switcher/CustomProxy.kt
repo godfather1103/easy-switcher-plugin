@@ -34,19 +34,21 @@ internal class CustomProxy(
             INSTANCE.authUserName = state.authUserName
             INSTANCE.authPassword = state.authPassword
             if (state.enableProxy) {
-                INSTANCE.proxy = when (state.proxyProtocol) {
-                    Proxy.Type.HTTP.name -> Proxy(
-                        Proxy.Type.HTTP,
-                        InetSocketAddress(state.proxyHost, state.proxyPort.toInt())
-                    )
+                INSTANCE.proxy = runCatching {
+                    when (state.proxyProtocol) {
+                        Proxy.Type.HTTP.name -> Proxy(
+                            Proxy.Type.HTTP,
+                            InetSocketAddress(state.proxyHost, state.proxyPort.toInt())
+                        )
 
-                    Proxy.Type.SOCKS.name -> Proxy(
-                        Proxy.Type.SOCKS,
-                        InetSocketAddress(state.proxyHost, state.proxyPort.toInt())
-                    )
+                        Proxy.Type.SOCKS.name -> Proxy(
+                            Proxy.Type.SOCKS,
+                            InetSocketAddress(state.proxyHost, state.proxyPort.toInt())
+                        )
 
-                    else -> null
-                }
+                        else -> null
+                    }
+                }.getOrNull()
             }
             val exclude = ArrayList<ProxyRule>(0)
             val contains = ArrayList<ProxyRule>(0)

@@ -217,7 +217,7 @@ public class Settings implements Configurable {
                 MyNotifier.notifyError(ConfigBundle.message("notifier.error.miss.proxy.host"));
                 return;
             }
-            if (!StringUtils.isPortOrEmpty(proxyPort.getText())) {
+            if (!StringUtils.isPortOrEmpty(proxyPort.getText(), false)) {
                 MyNotifier.notifyError(ConfigBundle.message("notifier.error.miss.proxy.port"));
                 return;
             }

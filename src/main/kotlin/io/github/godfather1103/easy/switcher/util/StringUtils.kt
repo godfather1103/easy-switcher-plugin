@@ -18,16 +18,15 @@ import org.apache.commons.lang3.StringUtils
  */
 object StringUtils {
     @JvmStatic
-    fun isPortOrEmpty(text: String?): Boolean {
+    @JvmOverloads
+    fun isPortOrEmpty(text: String?, emptyFlag: Boolean = true): Boolean {
         if (StringUtils.isEmpty(text)) {
-            return true
+            return emptyFlag
         }
-        try {
+        return runCatching {
             val port = text!!.toInt()
             return port >= 0 && port <= 65535
-        } catch (_: NumberFormatException) {
-            return false
-        }
+        }.getOrDefault(false)
     }
 
     @JvmStatic
