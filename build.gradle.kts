@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "io.github.godfather1103"
-version = "1.2"
+version = "1.3"
 
 repositories {
     mavenCentral()
@@ -57,7 +57,7 @@ intellijPlatform {
             sinceBuild = "242"
         }
         changeNotes = """
-      优化插件配置初次加载时机
+      增加测试网络连接行为(add test connect behavior)
     """.trimIndent()
     }
 }
