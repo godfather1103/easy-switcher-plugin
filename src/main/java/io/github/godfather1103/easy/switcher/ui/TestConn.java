@@ -1,10 +1,10 @@
 package io.github.godfather1103.easy.switcher.ui;
 
+import com.intellij.ui.JBColor;
 import com.intellij.util.net.HttpConnectionUtils;
 import io.github.godfather1103.easy.switcher.CustomProxy;
 import io.github.godfather1103.easy.switcher.settings.AppSettings;
 import io.github.godfather1103.easy.switcher.settings.ConfigBundle;
-import io.github.godfather1103.easy.switcher.util.MyNotifier;
 import io.github.godfather1103.easy.switcher.util.StringUtils;
 
 import javax.swing.*;
@@ -31,6 +31,7 @@ public class TestConn extends JDialog {
     private JButton buttonOk;
     private JButton buttonCancel;
     private JTextField url;
+    private JLabel showInfo;
     private final AppSettings.State state;
 
     public TestConn(AppSettings.State state) {
@@ -74,7 +75,7 @@ public class TestConn extends JDialog {
     private void onOk() {
         String myUrl = url.getText();
         if (!StringUtils.isUrl(myUrl)) {
-            MyNotifier.notifyError(ConfigBundle.message("notifier.error.testConnection.invalid.url"));
+            showInfo.setText(ConfigBundle.message("notifier.error.testConnection.invalid.url"));
             return;
         }
         try {
@@ -83,9 +84,11 @@ public class TestConn extends JDialog {
             // 重置为当前规则
             CustomProxy.reset(state);
             HttpConnectionUtils.prepareUrl(myUrl);
-            MyNotifier.notifyInfo(ConfigBundle.message("network_ok"));
+            showInfo.setText(ConfigBundle.message("network_ok"));
+            showInfo.setForeground(JBColor.GREEN);
         } catch (IOException e) {
-            MyNotifier.notifyError(ConfigBundle.message("network_error"));
+            showInfo.setText(ConfigBundle.message("network_error"));
+            showInfo.setForeground(JBColor.RED);
         } finally {
             // 还原默认
             CustomProxy.reset(AppSettings.getInstance().getState());
