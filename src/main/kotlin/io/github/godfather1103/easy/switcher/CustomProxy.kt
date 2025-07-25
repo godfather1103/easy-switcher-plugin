@@ -25,6 +25,7 @@ internal class CustomProxy(
 
         val DEFAULT_URI = URI(CustomProxy::class.java.name)
 
+        @JvmStatic
         fun reset(state: AppSettings.State) {
             // 重置
             INSTANCE.rules.clear()

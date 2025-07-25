@@ -38,5 +38,19 @@ class AppSettings(
         var profileUrl: String = "",
         var downloadProfile: String = "",
         var customProfile: String = ""
-    )
+    ) {
+        fun update(now: State): AppSettings.State {
+            this.enableProxy = now.enableProxy
+            this.proxyProtocol = now.proxyProtocol
+            this.proxyHost = now.proxyHost
+            this.proxyPort = now.proxyPort
+            this.enableAuth = now.enableAuth
+            this.authUserName = now.authUserName
+            this.authPassword = now.authPassword
+            this.profileUrl = now.profileUrl
+            this.downloadProfile = now.downloadProfile
+            this.customProfile = now.customProfile
+            return this
+        }
+    }
 }

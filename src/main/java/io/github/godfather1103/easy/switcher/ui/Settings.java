@@ -55,6 +55,7 @@ public class Settings implements Configurable {
     private JLabel password;
     private JLabel downloadedRules;
     private JLabel customRules;
+    private JButton testConnection;
 
     public Settings() {
     }
@@ -93,6 +94,9 @@ public class Settings implements Configurable {
         downProfileButton.setText(ConfigBundle.message("downloadProfileNow"));
         downProfileButton.setToolTipText(ConfigBundle.message("downloadProfileNow"));
 
+        testConnection.setText(ConfigBundle.message("testConnection"));
+        testConnection.setToolTipText(ConfigBundle.message("testConnection"));
+
         profileUrl.setToolTipText(ConfigBundle.message("profileUrl"));
 
         downloadedRules.setText(ConfigBundle.message("downloadProfile"));
@@ -104,13 +108,43 @@ public class Settings implements Configurable {
         customProfile.setToolTipText(ConfigBundle.message("customProfileDesc"));
     }
 
+    private void actionEnable() {
+        var selected = enableProxy.isSelected();
+        protocol.setEnabled(selected);
+        if (selected && protocol.getSelectedIndex() == -1) {
+            protocol.setSelectedItem(Proxy.Type.HTTP.name());
+        }
+        proxyHost.setEnabled(selected);
+        proxyPort.setEnabled(selected);
+        enableAuth.setEnabled(selected);
+        var authSelected = enableAuth.isSelected();
+        authUserName.setEnabled(selected && authSelected);
+        authPassword.setEnabled(selected && authSelected);
+        downProfileButton.setEnabled(StringUtils.isUrl(profileUrl.getText()));
+    }
+
+    private AppSettings.State makeNowState() {
+        return new AppSettings.State(
+                enableProxy.isSelected(),
+                Optional.ofNullable(protocol.getSelectedItem()).map(Objects::toString).orElse(Proxy.Type.HTTP.name()),
+                proxyHost.getText(),
+                proxyPort.getText(),
+                enableAuth.isSelected(),
+                authUserName.getText(),
+                showString(authPassword.getPassword()),
+                profileUrl.getText(),
+                downloadProfile.getText(),
+                customProfile.getText()
+        );
+    }
+
     @Override
     public @Nullable JComponent createComponent() {
         protocol.addItem(Proxy.Type.HTTP.name());
         protocol.addItem(Proxy.Type.SOCKS.name());
         addI18Desc();
-        enableProxy.addChangeListener(e -> actionOnSelect());
-        enableAuth.addChangeListener(e -> actionOnSelect());
+        enableProxy.addChangeListener(e -> actionEnable());
+        enableAuth.addChangeListener(e -> actionEnable());
         proxyPort.addFocusListener(new FocusAdapter() {
             @Override
             public void focusLost(FocusEvent e) {
@@ -150,22 +184,15 @@ public class Settings implements Configurable {
         downloadProfile.setEditable(false);
         customProfile.setBorder(BorderFactory.createLineBorder(JBColor.LIGHT_GRAY));
         customProfile.setAutoscrolls(true);
-        return rootPanel;
-    }
 
-    private void actionOnSelect() {
-        var selected = enableProxy.isSelected();
-        protocol.setEnabled(selected);
-        if (selected && protocol.getSelectedIndex() == -1) {
-            protocol.setSelectedItem(Proxy.Type.HTTP.name());
-        }
-        proxyHost.setEnabled(selected);
-        proxyPort.setEnabled(selected);
-        enableAuth.setEnabled(selected);
-        var authSelected = enableAuth.isSelected();
-        authUserName.setEnabled(selected && authSelected);
-        authPassword.setEnabled(selected && authSelected);
-        downProfileButton.setEnabled(StringUtils.isUrl(profileUrl.getText()));
+        testConnection.addActionListener(e -> {
+            var testConn = new TestConn(makeNowState());
+            testConn.setLocationRelativeTo(rootPanel);
+            testConn.pack();
+            testConn.setVisible(true);
+        });
+
+        return rootPanel;
     }
 
     @Override
@@ -199,18 +226,8 @@ public class Settings implements Configurable {
                 return;
             }
         }
-        var state = AppSettings.getInstance().getState();
-        state.setEnableProxy(enableProxy.isSelected());
-        state.setProxyProtocol((String) protocol.getSelectedItem());
-        state.setProxyHost(proxyHost.getText());
-        state.setProxyPort(proxyPort.getText());
-        state.setEnableAuth(enableAuth.isSelected());
-        state.setAuthUserName(authUserName.getText());
-        state.setAuthPassword(showString(authPassword.getPassword()));
-        state.setProfileUrl(profileUrl.getText());
-        state.setDownloadProfile(downloadProfile.getText());
-        state.setCustomProfile(customProfile.getText());
-        actionOnSelect();
+        var state = makeNowState();
+        actionEnable();
         if (StringUtils.isNotEmpty(profileUrl.getText()) && StringUtils.isEmpty(downloadProfile.getText())) {
             String text = HttpUtils.downAutoproxyRule(profileUrl.getText());
             downloadProfile.setText(text);
@@ -219,6 +236,7 @@ public class Settings implements Configurable {
             downloadProfile.setText("");
             state.setDownloadProfile("");
         }
+        AppSettings.getInstance().getState().update(state);
         CustomProxy.Companion.reset(state);
     }
 
@@ -235,7 +253,7 @@ public class Settings implements Configurable {
         profileUrl.setText(state.getProfileUrl());
         downloadProfile.setText(state.getDownloadProfile());
         customProfile.setText(state.getCustomProfile());
-        actionOnSelect();
+        actionEnable();
         CustomProxy.Companion.reset(state);
     }
 }
