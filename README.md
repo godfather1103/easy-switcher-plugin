@@ -4,6 +4,10 @@
 
 基于autoproxy规则自动切换代理的IntelliJ IDEA插件。
 
+### 规则说明
+
+[AutoProxy_Rules.md](AutoProxy_Rules.md)
+
 ### 安装方式
 
 1. 下载插件包

@@ -4,6 +4,10 @@
 
 An IntelliJ IDEA plugin that automatically switches proxies based on autoproxy rules.
 
+### Rule Description
+
+[AutoProxy_Rules.md](AutoProxy_Rules.md)
+
 ### Installation
 
 1. Download the plugin package
