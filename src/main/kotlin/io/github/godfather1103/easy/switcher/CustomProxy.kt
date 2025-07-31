@@ -90,23 +90,33 @@ internal class CustomProxy(
             rules.split("[\n\r]".toRegex()).filterNot {
                 it.isEmpty() || it.startsWith("!") || it.startsWith("[")
             }.forEach {
+                val ruleRegex: String
                 if (it.startsWith("@@")) {
-                    exclude.add(ProxyRule(convertRuleToRegex(it.substring(2)), false))
+                    ruleRegex = convertRuleToRegex(it.substring(2))
+                    exclude.add(ProxyRule(ruleRegex, false))
                 } else {
-                    contains.add(ProxyRule(convertRuleToRegex(it)))
+                    ruleRegex = convertRuleToRegex(it)
+                    contains.add(ProxyRule(ruleRegex))
                 }
             }
             return Tuple.of(exclude, contains)
         }
 
-        private fun convertRuleToRegex(rule: String): String = if (rule.startsWith("||")) {
+        fun convertRuleToRegex(rule: String): String = if (rule.startsWith("||")) {
             "^(https?:\\/\\/)?([^.]+\\.)*" + rule.substring(2).replace(".", "\\.") + ".*"
         } else if (rule.startsWith("|")) {
             "^" + rule.substring(1).replace(".", "\\.") + ".*"
         } else if (rule.startsWith("/") && rule.endsWith("/")) {
             rule.substring(1, rule.length - 1)
+        } else if (rule.startsWith("https://")) {
+            val tmp = rule.replace(".", "\\.").replace("*", ".*")
+            "^http:\\/\\/.+$tmp.*"
+        } else if (rule.startsWith("http://")) {
+            val tmp = rule.replace(".", "\\.").replace("*", ".*")
+            "$tmp.*|^http:\\/\\/.+$tmp.*"
         } else {
-            rule.replace(".", "\\.").replace("*", ".*")
+            val tmp = rule.replace(".", "\\.").replace("*", ".*")
+            "^http:\\/\\/.*$tmp.*"
         }
 
     }
