@@ -2,6 +2,7 @@ package io.github.godfather1103.easy.switcher
 
 import com.intellij.openapi.diagnostic.debug
 import com.intellij.openapi.diagnostic.logger
+import io.github.godfather1103.easy.switcher.util.HttpUtils
 import java.io.IOException
 import java.net.Proxy
 import java.net.ProxySelector
@@ -28,11 +29,11 @@ internal class CustomProxySelector : ProxySelector() {
             logger.debug { "$uri: no proxy, not http/https scheme: ${uri.scheme}" }
             return emptyList()
         }
-        if (isLocalhost(uri.host ?: "")) {
+        if (HttpUtils.isLocalhost(uri.host ?: "")) {
             logger.debug { "$uri: no proxy, localhost" }
             return emptyList()
         }
-        return CustomProxy.INSTANCE.rules.firstOrNull { it -> url.matches(it.ruleRegex.toRegex()) }?.run {
+        return CustomProxy.checkRule(url)?.run {
             logger.debug { "uri[$uri]，命中了[$ruleRegex][$needUse]" }
             if (needUse) {
                 listOf(CustomProxy.INSTANCE.proxy)
@@ -40,10 +41,6 @@ internal class CustomProxySelector : ProxySelector() {
                 emptyList()
             }
         } ?: emptyList()
-    }
-
-    fun isLocalhost(hostName: String): Boolean {
-        return hostName.equals("localhost", ignoreCase = true) || hostName == "127.0.0.1" || hostName == "::1"
     }
 
     override fun connectFailed(uri: URI?, sa: SocketAddress?, ioe: IOException?) {

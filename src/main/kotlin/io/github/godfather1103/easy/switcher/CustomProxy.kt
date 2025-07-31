@@ -26,6 +26,11 @@ internal class CustomProxy(
         val DEFAULT_URI = URI(CustomProxy::class.java.name)
 
         @JvmStatic
+        fun checkRule(url: String): ProxyRule? {
+            return INSTANCE.rules.firstOrNull { it -> url.matches(it.ruleRegex.toRegex()) }
+        }
+
+        @JvmStatic
         fun reset(state: AppSettings.State) {
             // 重置
             INSTANCE.rules.clear()
@@ -97,7 +102,7 @@ internal class CustomProxy(
         private fun convertRuleToRegex(rule: String): String = if (rule.startsWith("||")) {
             "^(https?:\\/\\/)?([^.]+\\.)*" + rule.substring(2).replace(".", "\\.") + ".*"
         } else if (rule.startsWith("|")) {
-            "^" + rule.substring(1).replace(".", "\\.")
+            "^" + rule.substring(1).replace(".", "\\.") + ".*"
         } else if (rule.startsWith("/") && rule.endsWith("/")) {
             rule.substring(1, rule.length - 1)
         } else {

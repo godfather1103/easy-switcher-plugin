@@ -34,6 +34,10 @@ object HttpUtils {
         .connectTimeout(30, TimeUnit.SECONDS)
         .build()
 
+    fun isLocalhost(hostName: String): Boolean {
+        return hostName.equals("localhost", ignoreCase = true) || hostName == "127.0.0.1" || hostName == "::1"
+    }
+
     @JvmStatic
     fun downAutoproxyRule(url: String): String {
         if (isUrl(url)) {

@@ -3,6 +3,7 @@ package io.github.godfather1103.easy.switcher.ui;
 import com.intellij.ui.JBColor;
 import com.intellij.util.net.HttpConnectionUtils;
 import io.github.godfather1103.easy.switcher.CustomProxy;
+import io.github.godfather1103.easy.switcher.ProxyRule;
 import io.github.godfather1103.easy.switcher.settings.AppSettings;
 import io.github.godfather1103.easy.switcher.settings.ConfigBundle;
 import io.github.godfather1103.easy.switcher.util.StringUtils;
@@ -31,7 +32,8 @@ public class TestConn extends JDialog {
     private JButton buttonOk;
     private JButton buttonCancel;
     private JTextField url;
-    private JLabel showInfo;
+    private JLabel showProxyInfo;
+    private JLabel showRuleCheckInfo;
     private final AppSettings.State state;
 
     public TestConn(AppSettings.State state) {
@@ -75,8 +77,22 @@ public class TestConn extends JDialog {
     private void onOk() {
         String myUrl = url.getText();
         if (!StringUtils.isUrl(myUrl)) {
-            showInfo.setText(ConfigBundle.message("notifier.error.testConnection.invalid.url"));
+            showProxyInfo.setText(ConfigBundle.message("notifier.error.testConnection.invalid.url"));
             return;
+        }
+        try {
+            // 重置为当前规则
+            CustomProxy.reset(state);
+            ProxyRule rule = CustomProxy.checkRule(myUrl);
+            if (rule == null) {
+                showRuleCheckInfo.setText(ConfigBundle.message("rule.missed"));
+            } else {
+                showRuleCheckInfo.setText(ConfigBundle.message(rule.getNeedUse() ? "rule.hit.use.proxy" : "rule.hit.no.use.proxy"));
+            }
+            showRuleCheckInfo.setForeground(JBColor.GREEN);
+        } finally {
+            // 还原默认
+            CustomProxy.reset(AppSettings.getInstance().getState());
         }
         try {
             // 注入自定义规则
@@ -84,11 +100,11 @@ public class TestConn extends JDialog {
             // 重置为当前规则
             CustomProxy.reset(state);
             HttpConnectionUtils.prepareUrl(myUrl);
-            showInfo.setText(ConfigBundle.message("network_ok"));
-            showInfo.setForeground(JBColor.GREEN);
+            showProxyInfo.setText(ConfigBundle.message("network_ok"));
+            showProxyInfo.setForeground(JBColor.GREEN);
         } catch (IOException e) {
-            showInfo.setText(ConfigBundle.message("network_error"));
-            showInfo.setForeground(JBColor.RED);
+            showProxyInfo.setText(ConfigBundle.message("network_error"));
+            showProxyInfo.setForeground(JBColor.RED);
         } finally {
             // 还原默认
             CustomProxy.reset(AppSettings.getInstance().getState());
