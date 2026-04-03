@@ -7,6 +7,7 @@ import io.github.godfather1103.easy.switcher.settings.AppSettings
 import io.github.godfather1103.easy.switcher.util.StringUtils
 import io.vavr.Tuple
 import io.vavr.Tuple2
+import java.net.Authenticator.RequestorType
 import java.net.InetSocketAddress
 import java.net.Proxy
 import java.net.URI
@@ -77,7 +78,14 @@ internal class CustomProxy(
                 JdkProxyCustomizer.getInstance().customizeProxySelector(CustomProxySelector.INSTANCE)
             }
             val pass = JdkProxyProvider.getInstance().authenticator.requestPasswordAuthenticationInstance(
-                DEFAULT_URI.toString(), null, 0, null, null, null, null, null
+                DEFAULT_URI.toString(),
+                null,
+                0,
+                null,
+                "",
+                null,
+                null,
+                RequestorType.SERVER
             )
             if (pass == null) {
                 JdkProxyCustomizer.getInstance().customizeAuthenticator(CustomProxyAuthenticator.INSTANCE)
